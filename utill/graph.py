@@ -1,5 +1,7 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from qiskit_optimization.applications import Maxcut
+import numpy as np
 import random
 
 def draw_graph(graph):
@@ -78,4 +80,15 @@ def draw_partition_graph(graph: nx.Graph, bitstring: list[int]):
 
     plt.title("Bipartite Graph Representation for MaxCut with Highlighted Edges")
     plt.show()
+
+def get_QUBO_Matrix(graph: nx.Graph):
+    w = nx.adjacency_matrix(graph).todense()
+    max_cut = Maxcut(w)
+    qp = max_cut.to_quadratic_program()
+    Quadratic = qp.objective.quadratic.to_array()
+    linear = qp.objective.linear.to_array()
+    np.fill_diagonal(Quadratic, linear)
+    return Quadratic
+
+
     
