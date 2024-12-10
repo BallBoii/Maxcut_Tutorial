@@ -4,7 +4,7 @@ from qiskit_optimization.applications import Maxcut
 import numpy as np
 import random
 
-def draw_graph(graph):
+def draw_graph(graph: nx.Graph):
     # Get positions for all nodes
     pos = nx.spring_layout(graph)
 
@@ -20,7 +20,7 @@ def draw_graph(graph):
     # Show the plot
     plt.show()
 
-def getRandomGraph(n, p=0.5, weighed=True, seed=None):
+def getRandomGraph(n, prob=0.5, weighted=True, seed=None):
     G = nx.Graph()
     V = range(n)
     G.add_nodes_from(V)
@@ -30,11 +30,29 @@ def getRandomGraph(n, p=0.5, weighed=True, seed=None):
     
     for i in range(n):
         for j in range(i + 1, n):
-            if random.random() > 0.5:
-                w = int(random.uniform(1, 10))
+            if random.random() > prob:
+                if(weighted):
+                    w = int(random.uniform(1, 10))
+                else:
+                    w = 1
                 G.add_edge(i, j, weight = w)
     return G
 
+def getGraphFromPath(path):
+    G = nx.Graph()
+    
+    with open(path, 'r') as file:
+        first_line = file.readline().strip()
+        num_nodes, num_edges = map(int, first_line.split()) # For validation
+
+        # Read the remaining lines for edges
+        for line in file:
+            if line.strip():  # Ignore empty lines
+                parts = line.strip().split()
+                node1, node2, weight = parts
+                G.add_edge(int(node1), int(node2), weight=float(weight))
+    
+    return G
 
 def draw_partition_graph(graph: nx.Graph, bitstring: list[int]):
     # Ensure the bitstring length matches the graph's nodes
