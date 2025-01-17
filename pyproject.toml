@@ -5,7 +5,6 @@ description = "A tutorial project for the Maxcut problem."
 authors = ["Your Name <your.email@example.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "maxcut_tutorial" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
